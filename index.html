@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML 新手村基礎隨堂測驗（含 AI 助教）</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header class="quiz-header">
+            <div class="badge">LEVEL 01 隨堂複習 + AI 助教</div>
+            <h1>📝 HTML 新手村基礎隨堂測驗</h1>
+            <p class="subtitle">共 10 題單選題，可隨時呼叫 AI 助教進行深度解題或生成延伸練習題！</p>
+            
+            <!-- AI API Key 輸入區 -->
+            <div class="api-bar">
+                <label for="gemini-api-key">🔑 Gemini API Key：</label>
+                <input type="password" id="gemini-api-key" placeholder="請貼上 AIza 開頭的金鑰以啟用 AI 助教...">
+                <span class="api-hint">（金鑰僅暫存於本機瀏覽器，不會外傳）</span>
+            </div>
+
+            <div class="progress-wrapper">
+                <div class="progress-info">
+                    <span id="progress-text">作答進度：0 / 10 題</span>
+                    <span id="progress-percent">0%</span>
+                </div>
+                <div class="progress-bar-bg">
+                    <div id="progress-bar" class="progress-bar-fill"></div>
+                </div>
+            </div>
+        </header>
+
+        <main id="quiz-container"></main>
+
+        <footer class="quiz-footer">
+            <button id="submit-btn" class="btn btn-primary">送出答案並查看成績</button>
+            <button id="reset-btn" class="btn btn-secondary" style="display: none;">重新測驗</button>
+            <div id="result-box" class="result-box" style="display: none;"></div>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
