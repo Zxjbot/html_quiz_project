@@ -55,7 +55,7 @@ const quizData = [
     {
         number: 7,
         title: "第 7 題：超連結屬性功能",
-        scenario: "情境：做個人名片時，設置 &lt;code&gt;&lt;a href=\"https://github.com\" target=\"_blank\"&gt;我的 GitHub&lt;/a&gt;&lt;/code&gt;，其中 &lt;code&gt;target=\"_blank\"&lt;/code&gt; 的作用是什麼？",
+        scenario: "情境：做個人名片時，設置 &lt;code&gt;&lt;a href=\"https://github.com\" target=\"_blank\"&gt;我的 GitHub&lt;/a&gt;&lt;/code&gt;，其中 &lt;code&gt;target=\"_blank\"&gt;&lt;/code&gt; 的作用是什麼？",
         options: ["(A) 把字體改為藍色並加上下劃線", "(B) 在瀏覽器中開啟新分頁", "(C) 將目標網頁下載到本機電腦", "(D) 防止使用者點擊該連結"],
         correctIndex: 1,
         rationale: "target=\"_blank\" 能讓連結在「新分頁」開啟，避免使用者離開當前網頁。"
@@ -184,15 +184,22 @@ async function askGemini(promptText, outputElementId) {
     }
 
     outputBox.style.display = "block";
-    outputBox.innerHTML = "⏳ AI 助教正在思考中，請稍候...";
+    outputBox.innerHTML = "⏳ AI 助教正在加速思考中...";
 
-   const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent?key=${apiKey}`;
+    // 🚀 關鍵優化：改用速度極快的 gemini-2.5-flash 模型
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+    
     try {
         const response = await fetch(url, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-                contents: [{ parts: [{ text: promptText }] }]
+                contents: [{ parts: [{ text: promptText }] }],
+                // 🚀 加入加速參數：降低隨機性讓它直接回答，並限制最大輸出長度加快生成
+                generationConfig: {
+                    temperature: 0.3,
+                    maxOutputTokens: 500
+                }
             })
         });
 
@@ -221,7 +228,7 @@ function explainQuestion(qIndex) {
     const cleanOptions = item.options.map(o => stripHtml(o)).join(" / ");
     const cleanCorrect = stripHtml(item.options[item.correctIndex]);
 
-    const prompt = `你是一位親切的網頁設計助教。請針對以下 HTML 題目，用生活化的比喻為初學者解釋為什麼正確答案是「${cleanCorrect}」，並逐一說明其他錯誤選項錯在哪裡（請用繁體中文回答，語氣輕鬆好懂）：\n題目：${item.title}\n${cleanScenario}\n選項：${cleanOptions}`;
+    const prompt = `你是一位親切的網頁設計助教。請針對以下 HTML 題目，用簡短生活化的比喻為初學者解釋為什麼正確答案是「${cleanCorrect}」，並快速說明其他錯誤選項錯在哪裡（請用繁體中文回答，精簡扼要）：\n題目：${item.title}\n${cleanScenario}\n選項：${cleanOptions}`;
     askGemini(prompt, `ai-box-${qIndex}`);
 }
 
@@ -229,7 +236,7 @@ function generateSimilarQuestion(qIndex) {
     const item = quizData[qIndex];
     const cleanScenario = stripHtml(item.scenario);
 
-    const prompt = `你是一位網頁設計老師。請根據以下題目的「核心考點」，為學生設計 1 題全新的類似單選題（包含情境題幹、A/B/C/D 四個選項），並在最下方空兩行附上「正確答案與簡短解析」（請用繁體中文回答）：\n原題考點：${item.title}\n原題情境：${cleanScenario}`;
+    const prompt = `你是一位網頁設計老師。請根據以下題目的「核心考點」，精簡設計 1 題全新的類似單選題（包含情境題幹、A/B/C/D 四個選項），並在下方附上「正確答案與簡短解析」（請用繁體中文回答）：\n原題考點：${item.title}\n原題情境：${cleanScenario}`;
     askGemini(prompt, `ai-box-${qIndex}`);
 }
 
