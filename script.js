@@ -1,47 +1,41 @@
-const quizData = [
+const baseQuizData = [
     {
-        number: 1,
-        title: "第 1 題：網頁三層分工",
+        topic: "網頁三層分工",
         scenario: "情境：在網頁畫面上「按下『切換夜間模式』按鈕後，背景顏色馬上記變成黑色」，這主要是哪一層的職責？",
         options: ["(A) HTML", "(B) CSS", "(C) JavaScript", "(D) Live Server"],
-        correctIndex: 2,
+        correctText: "JavaScript", // 記錄正確答案的文字內容，避免亂序後對錯位
         rationale: "JavaScript 負責「會做什麼動作」（如按下按鈕後的互動反應）；HTML 負責按鈕的存在（骨架），CSS 負責外觀顏色（衣服）。"
     },
     {
-        number: 2,
-        title: "第 2 題：HTML 骨架區塊",
+        topic: "HTML 骨架區塊",
         scenario: "情境：想讓瀏覽器分頁的頁籤顯示「小新的網路名片 ✨」，應該把 &lt;title&gt; 標籤放在 HTML 骨架的哪裡？",
         options: ["(A) &lt;body&gt; 區塊", "(B) &lt;head&gt; 區塊", "(C) &lt;!DOCTYPE html&gt; 上方", "(D) &lt;!-- 註解 --&gt; 裡面"],
-        correctIndex: 1,
+        correctText: "(B) &lt;head&gt; 區塊",
         rationale: "&lt;head&gt; 區塊承載設定與 metadata（包含分頁標題 &lt;title&gt;）；只有在 &lt;body&gt; 區塊裡的內容才會直接繪製在網頁主畫面上。"
     },
     {
-        number: 3,
-        title: "第 3 題：標籤與屬性名詞辨析",
+        topic: "標籤與屬性名詞辨析",
         scenario: "情境：在 &lt;code&gt;&lt;img src=\"images/me.jpg\" alt=\"大頭貼照片\"&gt;&lt;/code&gt; 程式碼中，&lt;code&gt;src&lt;/code&gt; 代表什麼？",
         options: ["(A) 屬性名稱", "(B) 屬性值", "(C) 元素內容", "(D) 結束標籤"],
-        correctIndex: 0,
+        correctText: "(A) 屬性名稱",
         rationale: "src 是屬性名稱（Attribute），\"images/me.jpg\" 是屬性值；&lt;img&gt; 屬於沒有結束標籤與內容的空元素。"
     },
     {
-        number: 4,
-        title: "第 4 題：VS Code 與 Emmet 縮寫",
+        topic: "VS Code 與 Emmet 縮寫",
         scenario: "情境：在 VS Code 中新增 &lt;code&gt;index.html&lt;/code&gt; 檔案後，要快速生成標準的 HTML5 骨架，該輸入什麼符號並按下 Tab？",
         options: ["(A) html:5", "(B) !（半形驚嘆號）", "(C) &lt;doctype&gt;", "(D) #"],
-        correctIndex: 1,
+        correctText: "(B) !（半形驚嘆號）",
         rationale: "在 VS Code 裡輸入半形驚嘆號 ! 再按 Tab 鍵，就能觸發內建的 Emmet 縮寫功能，一鍵長出完整 HTML 骨架。"
     },
     {
-        number: 5,
-        title: "第 5 題：語意的正確使用",
+        topic: "語意的正確使用",
         scenario: "情境：寫自我介紹時，想標記「超愛半糖珍奶」中的「超愛」作為重要資訊，並讓視障朋友的螢幕閱讀器朗讀時加重語氣，最適合用哪一個標籤？",
         options: ["(A) &lt;h1&gt;", "(B) &lt;b&gt;", "(C) &lt;strong&gt;", "(D) &lt;br&gt;"],
-        correctIndex: 2,
+        correctText: "(C) &lt;strong&gt;",
         rationale: "&lt;strong&gt; 在語意上代表重要性強調，螢幕閱讀器念到時會加重語氣；&lt;b&gt; 僅改變視覺外觀，&lt;h1&gt; 則用於整頁的大標題。"
     },
     {
-        number: 6,
-        title: "第 6 題：巢狀結構語法規則",
+        topic: "巢狀結構語法規則",
         scenario: "情境：下列哪一個 HTML 標籤寫法符合正確的「巢狀結構」（俄羅斯娃娃）規則？",
         options: [
             "(A) &lt;code&gt;&lt;p&gt;歡迎來到&lt;em&gt;我的網站&lt;/p&gt;&lt;/em&gt;&lt;/code&gt;",
@@ -49,20 +43,18 @@ const quizData = [
             "(C) &lt;code&gt;&lt;em&gt;&lt;p&gt;歡迎來到我的網站&lt;/em&gt;&lt;/p&gt;&lt;/code&gt;",
             "(D) &lt;code&gt;&lt;p&gt;&lt;em&gt;歡迎來到我的網站&lt;/p&gt;&lt;/em&gt;&lt;/code&gt;"
         ],
-        correctIndex: 1,
+        correctText: "(B) &lt;code&gt;&lt;p&gt;歡迎來到&lt;em&gt;我的網站&lt;/em&gt;&lt;/p&gt;&lt;/code&gt;",
         rationale: "巢狀結構遵守「後開先關」原則。&lt;em&gt; 在 &lt;p&gt; 內部開啟，就必須在 &lt;p&gt; 結束標籤之前關閉。"
     },
     {
-        number: 7,
-        title: "第 7 題：超連結屬性功能",
-        scenario: "情境：做個人名片時，設置 &lt;code&gt;&lt;a href=\"https://github.com\" target=\"_blank\"&gt;我的 GitHub&lt;/a&gt;&lt;/code&gt;，其中 &lt;code&gt;target=\"_blank\"&gt;&lt;/code&gt; 的作用是什麼？",
+        topic: "超連結屬性功能",
+        scenario: "情境：做個人名片時，設置 &lt;code&gt;&lt;a href=\"https://github.com\" target=\"_blank\"&gt;我的 GitHub&lt;/a&gt;&lt;/code&gt;，其中 &lt;code&gt;target=\"_blank\"&lt;/code&gt; 的作用是什麼？",
         options: ["(A) 把字體改為藍色並加上下劃線", "(B) 在瀏覽器中開啟新分頁", "(C) 將目標網頁下載到本機電腦", "(D) 防止使用者點擊該連結"],
-        correctIndex: 1,
+        correctText: "(B) 在瀏覽器中開啟新分頁",
         rationale: "target=\"_blank\" 能讓連結在「新分頁」開啟，避免使用者離開當前網頁。"
     },
     {
-        number: 8,
-        title: "第 8 題：網頁字元編碼與亂碼",
+        topic: "網頁字元編碼與亂碼",
         scenario: "情境：如果打開網頁時發現中文全部變成「å°æ–°」這種亂碼，最可能是因為 &lt;code&gt;&lt;head&gt;&lt;/code&gt; 中缺少了哪一行？",
         options: [
             "(A) &lt;code&gt;&lt;title&gt;首頁&lt;/title&gt;&lt;/code&gt;",
@@ -70,12 +62,11 @@ const quizData = [
             "(C) &lt;code&gt;&lt;meta charset=\"UTF-8\"&gt;&lt;/code&gt;",
             "(D) &lt;code&gt;&lt;link rel=\"stylesheet\" href=\"theme.css\"&gt;&lt;/code&gt;"
         ],
-        correctIndex: 2,
+        correctText: "(C) &lt;code&gt;&lt;meta charset=\"UTF-8\"&gt;&lt;/code&gt;",
         rationale: "&lt;meta charset=\"UTF-8\"&gt; 指定文字編碼方式，少了它瀏覽器無法用正確編碼讀取繁體中文與 emoji，導致亂碼。"
     },
     {
-        number: 9,
-        title: "第 9 題：開發工具 Live Server 功能",
+        topic: "開發工具 Live Server 功能",
         scenario: "情境：搭配使用 VS Code 的 Live Server 外掛開發網頁時，最主要的好處是什麼？",
         options: [
             "(A) 能自動幫程式碼除錯並修正語法錯誤",
@@ -83,12 +74,11 @@ const quizData = [
             "(C) 不需要寫 HTML 就能產生完整網頁",
             "(D) 自動將網頁部署到遠端免費伺服器"
         ],
-        correctIndex: 1,
+        correctText: "(B) 每次按 Ctrl+S 存檔，瀏覽器就會自動重新整理顯示新內容",
         rationale: "Live Server 的核心功能就是檔案存檔後，瀏覽器會即時自動重新整理更新畫面。"
     },
     {
-        number: 10,
-        title: "第 10 題：標題標籤語意理解",
+        topic: "標題標籤語意理解",
         scenario: "情境：關於 HTML 中的 &lt;code&gt;&lt;h1&gt;&lt;/code&gt; 到 &lt;code&gt;&lt;h6&gt;&lt;/code&gt; 標籤，下列敘述何者正確？",
         options: [
             "(A) &lt;h6&gt; 代表字型最大的標題",
@@ -96,10 +86,12 @@ const quizData = [
             "(C) &lt;h1&gt; 到 &lt;h6&gt; 代表內容大綱的重要層級，而非單純控制字體大小",
             "(D) 瀏覽器規定一個網頁絕對不能寫超過兩個 &lt;h2&gt;"
         ],
-        correctIndex: 2,
+        correctText: "(C) &lt;h1&gt; 到 &lt;h6&gt; 代表內容大綱的重要層級，而非單純控制字體大小",
         rationale: "標題階層代表內容的「重要程度與大綱結構」（&lt;h1&gt; 最重要、&lt;h6&gt; 最次要）；字體大小屬於 CSS 外觀調整範疇，不應為了字體小而濫用標題標籤。"
     }
 ];
+
+let quizData = [];
 
 const quizContainer = document.getElementById("quiz-container");
 const submitBtn = document.getElementById("submit-btn");
@@ -112,7 +104,6 @@ const apiKeyInput = document.getElementById("gemini-api-key");
 
 let isSubmitted = false;
 
-// 自動從瀏覽器讀取之前輸入過的 API Key
 if (localStorage.getItem("gemini_quiz_key")) {
     apiKeyInput.value = localStorage.getItem("gemini_quiz_key");
 }
@@ -120,7 +111,34 @@ apiKeyInput.addEventListener("input", () => {
     localStorage.setItem("gemini_quiz_key", apiKeyInput.value.trim());
 });
 
+function shuffleArray(array) {
+    const arr = [...array];
+    for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+}
+
 function renderQuiz() {
+    // 1. 先把 10 道題目順序打亂
+    const shuffledQuestions = shuffleArray(baseQuizData);
+
+    // 2. 組合題目，並把每一題的選項也進行隨機洗牌
+    quizData = shuffledQuestions.map((item, idx) => {
+        const shuffledOptions = shuffleArray(item.options);
+        // 找出洗牌後正確答案落在哪一個新的索引位置
+        const newCorrectIndex = shuffledOptions.indexOf(item.correctText);
+
+        return {
+            ...item,
+            number: idx + 1,
+            title: `第 ${idx + 1} 題：${item.topic}`,
+            options: shuffledOptions,
+            correctIndex: newCorrectIndex
+        };
+    });
+
     quizContainer.innerHTML = "";
     quizData.forEach((item, qIndex) => {
         const card = document.createElement("section");
@@ -166,7 +184,6 @@ function updateProgress() {
     progressBar.style.width = `${percent}%`;
 }
 
-// 去除 HTML 實體符號以便傳給 AI 閱讀
 function stripHtml(html) {
     const tmp = document.createElement("div");
     tmp.innerHTML = html;
@@ -184,21 +201,16 @@ async function askGemini(promptText, outputElementId) {
     }
 
     outputBox.style.display = "block";
-    outputBox.innerHTML = "⏳ AI 助教正在加速思考中...";
+    outputBox.innerHTML = "⏳ AI 助教正在思考中，請稍候...";
 
-    // 🚀 關鍵優化：改用速度極快的 gemini-2.5-flash 模型
-const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent?key=${apiKey}`;
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent?key=${apiKey}`;
+
     try {
         const response = await fetch(url, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-                contents: [{ parts: [{ text: promptText }] }],
-                // 🚀 加入加速參數：降低隨機性讓它直接回答，並限制最大輸出長度加快生成
-                generationConfig: {
-                    temperature: 0.3,
-                    maxOutputTokens: 500
-                }
+                contents: [{ parts: [{ text: promptText }] }]
             })
         });
 
@@ -210,7 +222,6 @@ const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-
         }
 
         const reply = data.candidates[0].content.parts[0].text;
-        // 簡易格式化 Markdown 粗體與換行
         const formatted = reply
             .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
             .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
@@ -225,9 +236,10 @@ function explainQuestion(qIndex) {
     const item = quizData[qIndex];
     const cleanScenario = stripHtml(item.scenario);
     const cleanOptions = item.options.map(o => stripHtml(o)).join(" / ");
+    // 因為選項洗牌了，我們要用正確的 index 抓出正確答案文字
     const cleanCorrect = stripHtml(item.options[item.correctIndex]);
 
-    const prompt = `你是一位親切的網頁設計助教。請針對以下 HTML 題目，用簡短生活化的比喻為初學者解釋為什麼正確答案是「${cleanCorrect}」，並快速說明其他錯誤選項錯在哪裡（請用繁體中文回答，精簡扼要）：\n題目：${item.title}\n${cleanScenario}\n選項：${cleanOptions}`;
+    const prompt = `你是一位親切的網頁設計助教。請針對以下 HTML 題目，用生活化的比喻為初學者解釋為什麼正確答案是「${cleanCorrect}」，並逐一說明其他錯誤選項錯在哪裡（請用繁體中文回答，語氣輕鬆好懂）：\n題目：${item.title}\n${cleanScenario}\n選項：${cleanOptions}`;
     askGemini(prompt, `ai-box-${qIndex}`);
 }
 
@@ -235,7 +247,7 @@ function generateSimilarQuestion(qIndex) {
     const item = quizData[qIndex];
     const cleanScenario = stripHtml(item.scenario);
 
-    const prompt = `你是一位網頁設計老師。請根據以下題目的「核心考點」，精簡設計 1 題全新的類似單選題（包含情境題幹、A/B/C/D 四個選項），並在下方附上「正確答案與簡短解析」（請用繁體中文回答）：\n原題考點：${item.title}\n原題情境：${cleanScenario}`;
+    const prompt = `你是一位網頁設計老師。請根據以下題目的「核心考點」，為學生設計 1 題全新的類似單選題（包含情境題幹、A/B/C/D 四個選項），並在最下方空兩行附上「正確答案與簡短解析」（請用繁體中文回答）：\n原題考點：${item.title}\n原題情境：${cleanScenario}`;
     askGemini(prompt, `ai-box-${qIndex}`);
 }
 
@@ -288,7 +300,7 @@ submitBtn.addEventListener("click", () => {
                   "再接再厲！點擊上方 AI 助教把觀念釐清後再挑戰一次吧！📚";
 
     resultBox.style.display = "block";
-    resultBox.innerHTML = `測驗成績：${score} 分（答對 ${correctCount} / ${quizData.length} 題）<br><span style="font-size: 0.98rem; font-weight: 500; color: #334155;">${comment}</span>`;
+    resultBox.innerHTML = `測驗成績：${score} 分（答對 ${correctCount} / ${quizData.length} 題）<br><span style="font-size: 0.98rem; font-weight: 500; color: #cbd5e1;">${comment}</span>`;
     resultBox.scrollIntoView({ behavior: "smooth" });
 });
 
@@ -297,7 +309,7 @@ resetBtn.addEventListener("click", () => {
     submitBtn.style.display = "inline-block";
     resetBtn.style.display = "none";
     resultBox.style.display = "none";
-    renderQuiz();
+    renderQuiz(); // 點擊重新測驗時，題目與選項會再次全部隨機洗牌！
     window.scrollTo({ top: 0, behavior: "smooth" });
 });
 
